@@ -3,7 +3,6 @@ Created on Apr 16, 2011
 
 @author: etherealite
 '''
-
 import os, sys
 proj_dir = os.path.abspath(os.path.dirname(__file__))
 packages_dir = os.path.join(proj_dir, 'packages')
@@ -29,7 +28,7 @@ def tablesetup():
     drop_tables = "DROP TABLE IF EXISTS %s,%s" % \
     (PEOPLE_TABLE, GROUP_TABLE)
     c.execute(drop_tables)
-    
+
     create_people = """
         CREATE TABLE %s
         (
@@ -51,7 +50,7 @@ def tablesetup():
         )
     """ % PEOPLE_TABLE
     c.execute(create_people)
-    
+
     create_groups = """
         CREATE TABLE %s
         (
@@ -60,7 +59,9 @@ def tablesetup():
             member VARCHAR(300),
             source VARCHAR(60),
             thunderpeople_id INT(11),
-            PRIMARY KEY(id)
+            PRIMARY KEY(id),
+            FOREIGN KEY(thunderpeople_id)
+                REFERENCES thunderpeople(id)
         )
     """ % GROUP_TABLE
     c.execute(create_groups)
@@ -70,7 +71,7 @@ def tablesetup():
 # Make the parser actually do something by overriding its handle() method
 
 class LDIFBird(LDIFParser):
-    
+
     def handle(self, dn, entry):
         source = self.source
         if 'person' in entry['objectclass']:
@@ -142,20 +143,20 @@ def load():
 def putkeys():
     cursor.execute("SELECT id, dn FROM thunderpeople")
     people = cursor.fetchall()
-    
+
     for person in people:
         person_id = person[0]
         person_dn = person[1]
-        
+
         # Handle email addresses with pesky quotes.
         person_dn = person_dn.replace('"', r'\"') 
-        
+
         query = 'UPDATE thundergroup SET thunderpeople_id' \
         ' = "%s" WHERE member = "%s"' % (person_id, person_dn)
         print query
         cursor.execute(query)
-        
-        
+
+
     query = 'SELECT * FROM thundergroup WHERE thunderpeople_id' \
     ' IS NULL;'
     cursor.execute(query)
@@ -169,6 +170,6 @@ def putkeys():
                 print record
             raise
 
-#tablesetup()
-#load()
-#putkeys()
+tablesetup()
+load()
+putkeys()
