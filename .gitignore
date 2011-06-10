@@ -1,0 +1,5 @@
+#ignore the following file types
+
+*~
+.*.swp
+*.pyc
