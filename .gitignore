@@ -3,3 +3,7 @@
 *~
 .*.swp
 *.pyc
+*.ldif
+*.xls
+*.mdb
+*.csv
