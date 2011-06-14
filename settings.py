@@ -12,7 +12,7 @@ sys.path.append(packages_dir)
 # path to mdb tools
 MDB_TOOLS = '/usr/bin/'
 
-SOURCES_DIR = os.path.join(os.path.dirname((__file__)), 'sources')
+SOURCES_DIR = os.path.join(os.path.dirname((__file__)), 'loadfiles')
 ###
 # expand file paths
 def expand_paths():
