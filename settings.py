@@ -12,25 +12,22 @@ sys.path.append(packages_dir)
 # path to mdb tools
 MDB_TOOLS = '/usr/bin/'
 
-# Mysql host DB settings
-HOST = 'localhost'
-DATABASE = 'tfkdb'
-USER = 'root'
-PASSWD = 'password'
-
-
-
+SOURCES_DIR = os.path.join(os.path.dirname((__file__)), 'sources')
 ###
 # expand file paths
 def expand_paths():
     for mdb_file,ldif_file in zip(MDB_FILES, LDIF_FILES.keys()):
         MDB_FILES[mdb_file]['file'] = SOURCES_DIR + "/" + MDB_FILES[mdb_file]['file']
         LDIF_FILES[ldif_file]['file'] = SOURCES_DIR + "/" + LDIF_FILES[ldif_file]['file']
-# sources file dir
 
-SOURCES_DIR = '/home/etherealite/projects/tfk/sources'
-# Access databases and their table name in the form of 
 
+# Mysql host DB settings
+HOST = 'localhost'
+DATABASE = 'tfkload'
+USER = 'root'
+PASSWD = 'password'
+
+# Access databases and their table name in the form of
 # key : { 'file' : filename, 'table' : relevent table)
 MDB_FILES = {
              'rides' : {'file' : 'Dbase_client_New.mdb',
@@ -40,6 +37,9 @@ MDB_FILES = {
              'national' : {'file': 'National.mdb', 
                            'table' : 'NATIONAL MASTER'}
              }
+
+#name of table onto merge disparate mdb tables
+MDB_MERGED = 'mdb_merged'
 
 ###
 # Settings for thunder bird import.

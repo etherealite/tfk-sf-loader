@@ -22,8 +22,8 @@ create_info = """
         id INT(11) AUTO_INCREMENT,
         attribute varchar(60),
         value varchar(60),
-        duplicates INT(11),
-        source varchar(60),
+        occurrances INT(11),
+        table_name varchar(60),
         PRIMARY KEY(id)
     )
 """

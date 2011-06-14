@@ -59,6 +59,7 @@ class Cursor(object):
 
 
     def _setfrom_obj(self, settings_obj):
+        """Set needed instance attributes from settings object"""
         self.host = settings_obj.HOST
         self.user = settings_obj.USER
         self.database = settings_obj.DATABASE
@@ -66,6 +67,7 @@ class Cursor(object):
 
 
     def use_db(self, database):
+        """Change the db selected by the cursor"""
         self._opendb(database)
         self._getcursor()
 
@@ -97,23 +99,6 @@ def insert(table, data):
         (%s)
         VALUES(%s)
     """ % (table, str_columns, str_values)
+    return insert_str
     cursor.execute(insert_str)
 
-
-
-def create_table(table_name, columns):
-    col_def = "%s %s%s, "
-    def_body = ''
-    for pos in sorted(columns.keys()):
-        col_name = columns[pos][0]
-        col_type = columns[pos][1]
-        col_max = columns[pos][2]
-        if not col_max:
-            col_max = ''
-        else:
-            col_max = '(' + str(columns[pos][2]) + ')'
-        def_body += col_def % (col_name, col_type, col_max)
-    def_body = def_body[:-2]
-
-    query_string = """CREATE TABLE %s (%s);""" % (table_name, def_body)
-    cursor.execute(query_string)

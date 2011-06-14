@@ -25,15 +25,16 @@ c = cursor
 ###
 # Setup tables and stuff
 def tablesetup():
-    drop_tables = "DROP TABLE IF EXISTS %s,%s" % \
+    drop_tables = "DROP IF EXISTS %s,%s;" % \
     (PEOPLE_TABLE, GROUP_TABLE)
-    c.execute(drop_tables)
+    #c.execute(drop_tables)
 
     create_people = """
         CREATE TABLE %s
         (
             id INT(11) AUTO_INCREMENT,
             dn VARCHAR(300),
+            cn VARCHAR(300),
             first_name VARCHAR(60),
             last_name VARCHAR(60),
             nick_name VARCHAR(60),
@@ -87,10 +88,12 @@ def add_person(dn, entry, source):
     person = {'dn' : dn}
     for attribute in entry:
         if attribute in person2table.keys():
+            # TODO: Fix; Unreadable as fuck.
             person[person2table[attribute]] = entry[attribute][0]
     person['source'] = source
     print person
-    insert(PEOPLE_TABLE, person)
+    query = insert(PEOPLE_TABLE, person)
+    cursor.execute(query)
 
 def add_group(dn, entry, source):
     group = {
@@ -99,7 +102,8 @@ def add_group(dn, entry, source):
              }
     for dn in entry['member']:
         insert_group = dict(group, **{'member' : dn})
-        insert(GROUP_TABLE,  insert_group)
+        query = insert(GROUP_TABLE,  insert_group)
+        cursor.execute(query)
 
 
 ###
@@ -107,6 +111,7 @@ def add_group(dn, entry, source):
 
 # Table field names mapped to LDIF parser equivalents.
 table2person = {
+             'cn' : 'cn',
              'first_name' : 'givenName',
              'last_name' : 'sn',
              'nick_name' : 'mozillaNickname',
